@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #0CC0DF; /* Background color */
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 40%;
+            max-width: 800px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow */
+            padding: 20px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 5px solid #0CC0DF; /* Outer blue border color */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .qa-box {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .question {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .answer {
+            font-size: 1.2em;
+            color: #555;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3); /* Text shadow */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img id="quizImage" src="https://i.imgur.com/NXIYM6L.png" alt="Quiz Image">
+        <div class="qa-box">
+            <div id="question" class="question">Click the image to get a question!</div>
+            <div id="answer" class="answer"></div>
+        </div>
+    </div>
+    
+    <script>
+        const questionsAndAnswers = [
+            { question: "Which 1980s band is known for the hit song 'Sweet Dreams (Are Made of This)'?", answer: "Eurythmics" },
+            { question: "Who sang the 1984 hit single 'Purple Rain'?", answer: "Prince" },
+            { question: "Which British band released the iconic album 'The Joshua Tree' in 1987?", answer: "U2" },
+            { question: "What 1980s song by Michael Jackson features the famous 'moonwalk' dance?", answer: "Billie Jean" },
+            { question: "Which 1980s rock band is known for the song 'Livin' on a Prayer'?", answer: "Bon Jovi" },
+            { question: "Who released the 1985 album 'Like a Virgin'?", answer: "Madonna" },
+            { question: "Which 1980s song by Whitney Houston was featured in the movie 'The Bodyguard'?", answer: "I Will Always Love You" },
+            { question: "What was the name of the 1980s band fronted by David Bowie that had hits like 'Let's Dance'?", answer: "David Bowie" },
+            { question: "Which 1980s song by a-ha is famous for its animated music video?", answer: "Take On Me" },
+            { question: "Which American rock band is known for their 1987 hit 'You Give Love a Bad Name'?", answer: "Bon Jovi" },
+            { question: "Who sang 'Girls Just Want to Have Fun' in 1983?", answer: "Cyndi Lauper" },
+            { question: "Which 1980s band is known for the hit single 'Don't You (Forget About Me)'?", answer: "Simple Minds" },
+            { question: "What was the name of the 1980s synth-pop band that released 'Enjoy the Silence'?", answer: "Depeche Mode" },
+            { question: "Which 1980s song by George Michael was a hit with its music video featuring a gospel choir?", answer: "Jesus to a Child" },
+            { question: "Who had a major hit in 1984 with the song 'Wake Me Up Before You Go-Go'?", answer: "Wham!" },
+            { question: "Which band released the 1982 album 'Thriller', the best-selling album of all time?", answer: "Michael Jackson" },
+            { question: "What 1980s hit by Bryan Adams is famous for its lyrics 'Summer of '69'?", answer: "Summer of '69" },
+            { question: "Who released the 1983 album 'Let's Dance'?", answer: "David Bowie" },
+            { question: "Which 1980s song by Kool & the Gang is famous for its catchy chorus and dance beat?", answer: "Celebration" },
+            { question: "What was the name of the 1980s band led by Freddie Mercury that is known for 'Another One Bites the Dust'?", answer: "Queen" },
+            { question: "Which American singer had a 1984 hit with 'Footloose'?", answer: "Kenny Loggins" },
+            { question: "Which 1980s song by the Human League became a top hit with its synth-pop sound?", answer: "Don't You Want Me" },
+            { question: "Who released the 1985 album 'The Dream of the Blue Turtles'?", answer: "Sting" },
+            { question: "Which 1980s song by Pat Benatar is known for its empowering message?", answer: "Hit Me With Your Best Shot" },
+            { question: "Which 1980s band is known for the song 'Take On Me' and its animated music video?", answer: "a-ha" },
+            { question: "What was the name of the 1980s rock band fronted by Steven Tyler?", answer: "Aerosmith" },
+            { question: "Who released the hit song 'Addicted to Love' in 1986?", answer: "Robert Palmer" },
+            { question: "Which 1980s song by Devo is known for its quirky music video?", answer: "Whip It" },
+            { question: "What was the name of the 1980s album by The Police that includes the song 'Every Breath You Take'?", answer: "Synchronicity" },
+            { question: "Which 1980s band is known for the song 'Tainted Love'?", answer: "Soft Cell" },
+            { question: "Who released the song 'Sweet Child O' Mine' in 1987?", answer: "Guns N' Roses" },
+            { question: "Which 1980s song by Tiffany became a major hit with its catchy chorus?", answer: "I Think We're Alone Now" },
+            { question: "Which 1980s artist had a hit with 'When Doves Cry'?", answer: "Prince" },
+            { question: "Which American rock band is known for their 1989 hit 'New Sensation'?", answer: "INXS" },
+            { question: "What was the title of Madonna's 1984 album that includes 'Material Girl'?", answer: "Like a Virgin" },
+            { question: "Which 1980s song by Billy Joel is known for its storytelling lyrics?", answer: "We Didn't Start the Fire" },
+            { question: "Who sang 'Karma Chameleon' in the 1980s?", answer: "Culture Club" },
+            { question: "Which 1980s hit by Blondie is known for its new wave sound?", answer: "Call Me" },
+            { question: "Which band released the 1986 hit 'Walk Like an Egyptian'?", answer: "The Bangles" },
+            { question: "Who released the 1981 album 'Beauty and the Beat'?", answer: "The Go-Go's" },
+            { question: "Which 1980s song by Michael Jackson features a famous music video with zombies?", answer: "Thriller" },
+            { question: "What was the name of the 1980s band led by Robert Smith?", answer: "The Cure" },
+            { question: "Which 1980s artist had a hit with 'Private Idaho'?", answer: "The B-52's" },
+            { question: "What was the title of the 1980s song by Journey known for its ballad style?", answer: "Faithfully" },
+            { question: "Who released the 1984 hit 'Dancing in the Dark'?", answer: "Bruce Springsteen" },
+            { question: "Which 1980s band is known for their song 'Sweet Freedom'?", answer: "Michael McDonald" },
+            { question: "What was the name of the 1980s song by Billy Idol that became a dance hit?", answer: "Dancing with Myself" },
+            { question: "Which 1980s song by Air Supply is known for its soft rock sound?", answer: "All Out of Love" },
+            { question: "Which 1980s artist is known for the song 'I Want to Know What Love Is'?", answer: "Foreigner" },
+            { question: "Who sang 'Don't You (Forget About Me)' in 1985?", answer: "Simple Minds" },
+            { question: "Which 1980s band is known for the song 'Rock Lobster'?", answer: "The B-52's" },
+            { question: "What was the title of the 1980s song by The Clash known for its political message?", answer: "Rock the Casbah" },
+            { question: "Which 1980s artist released the album 'Tutu'?", answer: "Miles Davis" },
+            { question: "Who released the 1982 album 'The Lexicon of Love'?", answer: "ABC" },
+            { question: "Which 1980s song by Phil Collins became famous for its powerful drum solo?", answer: "In the Air Tonight" },
+            { question: "What was the name of the 1980s band fronted by Michael Hutchence?", answer: "INXS" },
+            { question: "Which 1980s song by Cyndi Lauper is known for its upbeat and fun sound?", answer: "Girls Just Want to Have Fun" },
+            { question: "Who had a major hit with 'The Reflex' in 1984?", answer: "Duran Duran" },
+            { question: "Which 1980s song by Soft Cell became known for its melancholic tune?", answer: "Tainted Love" },
+            { question: "What was the title of the 1980s album by Talking Heads that includes 'Once in a Lifetime'?", answer: "Remain in Light" },
+            { question: "Who released the 1986 hit 'Sledgehammer'?", answer: "Peter Gabriel" },
+            { question: "Which 1980s band is known for their song 'I Ran'?", answer: "A Flock of Seagulls" },
+            { question: "What was the name of the 1980s song by Huey Lewis and the News known for its energetic beat?", answer: "The Power of Love" },
+            { question: "Which 1980s artist had a hit with 'How Will I Know'?", answer: "Whitney Houston" },
+            { question: "Who sang 'Every Breath You Take' in 1983?", answer: "The Police" },
+            { question: "Which 1980s band is known for the song 'I Want Candy'?", answer: "Bow Wow Wow" },
+            { question: "What was the title of the 1980s album by OMD that includes 'If You Leave'?", answer: "Junk Culture" },
+            { question: "Who released the 1986 album 'Graceland'?", answer: "Paul Simon" },
+            { question: "Which 1980s song by The Human League is famous for its new wave sound?", answer: "Don't You Want Me" },
+            { question: "What was the name of the 1980s band that had a hit with 'We Got the Beat'?", answer: "The Go-Go's" },
+            { question: "Which 1980s artist had a hit with 'Sweet Freedom'?", answer: "Michael McDonald" },
+            { question: "Who released the 1984 album 'The Heart of the Matter'?", answer: "Don Henley" },
+            { question: "What was the title of the 1980s hit by Rick Springfield?", answer: "Jessie's Girl" },
+            { question: "Which 1980s song by Billy Joel is known for its reflective lyrics?", answer: "The Longest Time" },
+            { question: "Who released the 1980s hit 'Obsession'?", answer: "Animotion" },
+            { question: "What was the title of the 1980s song by Billy Idol that became famous for its music video?", answer: "Eyes Without a Face" },
+            { question: "Which 1980s band is known for their song 'Modern Love'?", answer: "David Bowie" },
+            { question: "Who had a major hit with 'Don't Stop Believin'' in 1981?", answer: "Journey" },
+            { question: "What was the name of the 1980s song by Culture Club that became a hit?", answer: "Karma Chameleon" },
+            { question: "Which 1980s artist released 'Don't You Want Me'?", answer: "The Human League" },
+            { question: "What was the title of the 1980s album by Spandau Ballet that includes 'True'?", answer: "True" },
+            { question: "Who sang 'We Don't Talk Anymore' in the 1980s?", answer: "Cliff Richard" }
+        ];
+
+        document.getElementById('quizImage').addEventListener('click', function() {
+            const randomIndex = Math.floor(Math.random() * questionsAndAnswers.length);
+            const question = questionsAndAnswers[randomIndex].question;
+            const answer = questionsAndAnswers[randomIndex].answer;
+
+            document.getElementById('question').textContent = question;
+            document.getElementById('answer').textContent = answer;
+        });
+    </script>
+</body>
+</html>
